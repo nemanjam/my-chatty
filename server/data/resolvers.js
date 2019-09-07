@@ -3,6 +3,7 @@ import { Group, Message, User } from "./connectors";
 
 // connectori su orm mapiranja, a resolveri su orm upiti mapiranja na graphql
 // Group, Message, User sequelize modeli tabele
+//
 
 export const resolvers = {
   Date: GraphQLDate,

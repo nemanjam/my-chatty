@@ -1,23 +1,17 @@
 module.exports = {
-    "env": {
-        "es6": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
+  parser: "babel-eslint",
+  extends: "airbnb",
+  plugins: ["react", "jsx-a11y", "import"],
+  rules: {
+    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
+    "react/require-default-props": [0],
+    "react/no-unused-prop-types": [
+      2,
+      {
+        skipShapeProps: true
+      }
     ],
-    "rules": {
-    }
+    "react/no-multi-comp": [0],
+    "no-bitwise": [0]
+  }
 };

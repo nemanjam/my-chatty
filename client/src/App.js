@@ -11,22 +11,22 @@ import {ReduxCache, apolloReducer} from 'apollo-cache-redux';
 import ReduxLink from 'apollo-link-redux';
 import {onError} from 'apollo-link-error';
 
-// import AppWithNavigationState, {
-//   navigationReducer,
-//   navigationMiddleware,
-// } from './navigation';
+import AppWithNavigationState, {
+  navigationReducer,
+  navigationMiddleware,
+} from './navigation';
 
-const URL = 'http://10.0.2.2:8080'; // set your comp's url here
+const URL = 'http://10.0.2.2:8080';
+// const URL = 'http://192.168.0.184:8080'; // set your comp's url here
 
 const store = createStore(
   combineReducers({
     apollo: apolloReducer,
-    //nav: navigationReducer,
+    nav: navigationReducer,
   }),
   {},
   // initial state
-  composeWithDevTools(),
-  //composeWithDevTools(applyMiddleware(navigationMiddleware)),
+  composeWithDevTools(applyMiddleware(navigationMiddleware)),
 );
 
 const cache = new ReduxCache({store});
@@ -49,8 +49,7 @@ export default class App extends Component {
     return (
       <ApolloProvider client={client}>
         <ReduxProvider store={store}>
-          {/* <AppWithNavigationState /> */}
-          <Text>hello 1</Text>
+          <AppWithNavigationState />
         </ReduxProvider>
       </ApolloProvider>
     );

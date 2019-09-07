@@ -15,6 +15,9 @@ import {
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers';
 
+import Groups from './screens/Groups';
+import Messages from './screens/Messages';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -42,7 +45,7 @@ const TestScreen = title => () => (
 // tabs in main screen
 const MainScreenNavigator = TabNavigator(
   {
-    Chats: {screen: TestScreen('Chats')},
+    Chats: {screen: Groups},
     Settings: {screen: TestScreen('Settings')},
   },
   {
@@ -50,9 +53,15 @@ const MainScreenNavigator = TabNavigator(
   },
 );
 
-const AppNavigator = StackNavigator({
-  Main: {screen: MainScreenNavigator},
-});
+const AppNavigator = StackNavigator(
+  {
+    Main: {screen: MainScreenNavigator},
+    Messages: {screen: Messages},
+  },
+  {
+    mode: 'modal',
+  },
+);
 
 // reducer initialization code
 const initialState = AppNavigator.router.getStateForAction(

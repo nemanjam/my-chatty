@@ -13,21 +13,18 @@ import reducer from './reducer';
 
 import AppTabNavigator from './navigation';
 
-const URL = 'http://10.0.2.2:8080';
-// const URL = 'http://192.168.0.184:8080';
-
-const cache = new InMemoryCache();
+// const URL = 'http://10.0.2.2:8080';
+// // const URL = 'http://192.168.0.184:8080';
+// const httpLink = createHttpLink({uri: URL});
 
 const errorLink = onError(errors => {
   console.log(errors);
 });
-const httpLink = createHttpLink({uri: URL});
-
-const link = ApolloLink.from([errorLink, httpLink]);
+const link = ApolloLink.from([errorLink /*,httpLink*/]);
 
 export const client = new ApolloClient({
   link,
-  cache,
+  cache: new InMemoryCache(),
 });
 
 export default App = () => {
@@ -35,11 +32,11 @@ export default App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <ApolloProvider client={client}>
-      <Context.Provider value={{state, dispatch}}>
-        <AppTabNavigator />
-      </Context.Provider>
-    </ApolloProvider>
+    // <ApolloProvider client={client}>
+    <Context.Provider value={{state, dispatch}}>
+      <AppTabNavigator />
+    </Context.Provider>
+    // </ApolloProvider>
   );
 };
 

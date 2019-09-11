@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {_, flowRight as compose} from 'lodash';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
 import {
   FlatList,
@@ -11,9 +10,6 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-
-import {graphql} from 'react-apollo';
-import {USER_QUERY} from '../graphql/UserQuery';
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +72,7 @@ Group.propTypes = {
   }),
 };
 
-class Groups extends Component {
+class GroupsScreen extends Component {
   static navigationOptions = {
     title: 'Chats',
   };
@@ -101,21 +97,12 @@ class Groups extends Component {
 
   render() {
     // console.log(this.props);
-    const {loading, user} = this.props; // render loading placeholder while we fetch messages
-
-    if (loading || !user) {
-      return (
-        <View style={[styles.loading, styles.container]}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
 
     // render list of groups for user
     return (
       <View style={styles.container}>
         <FlatList
-          data={groups}
+          data={fakeData()}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />
@@ -142,15 +129,4 @@ Groups.propTypes = {
 };
 */
 
-const userQuery = graphql(USER_QUERY, {
-  options: () => ({variables: {id: 1}}), // fake the user for now
-  props: ({data: {loading, user}}) => {
-    console.log(user);
-    return {
-      loading,
-      user,
-    };
-  },
-});
-
-export default userQuery(Groups);
+export default GroupsScreen;

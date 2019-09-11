@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'mychatty' do
-  # Pods for mychatty
+target 'client' do
+  # Pods for client
   pod 'React', :path => '../node_modules/react-native/'
   pod 'React-Core', :path => '../node_modules/react-native/React'
   pod 'React-DevSupport', :path => '../node_modules/react-native/React'
@@ -27,7 +27,7 @@ target 'mychatty' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'mychattyTests' do
+  target 'clientTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -35,10 +35,10 @@ target 'mychatty' do
   use_native_modules!
 end
 
-target 'mychatty-tvOS' do
-  # Pods for mychatty-tvOS
+target 'client-tvOS' do
+  # Pods for client-tvOS
 
-  target 'mychatty-tvOSTests' do
+  target 'client-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mychatty"
+        applicationId "com.client"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

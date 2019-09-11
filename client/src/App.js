@@ -1,60 +1,45 @@
-import React, {Component} from 'react';
+import React, {Component, useContext, useReducer} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+
 import {ApolloClient} from 'apollo-client';
 import {ApolloLink} from 'apollo-link';
 import {ApolloProvider} from 'react-apollo';
-import {composeWithDevTools} from 'redux-devtools-extension';
 import {createHttpLink} from 'apollo-link-http';
-import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {Provider as ReduxProvider} from 'react-redux';
-import {ReduxCache, apolloReducer} from 'apollo-cache-redux';
-import ReduxLink from 'apollo-link-redux';
+import {InMemoryCache} from 'apollo-cache-inmemory';
 import {onError} from 'apollo-link-error';
 
-import AppWithNavigationState, {
-  navigationReducer,
-  navigationMiddleware,
-} from './navigation';
+import Context from './context';
+import reducer from './reducer';
 
 const URL = 'http://10.0.2.2:8080';
 // const URL = 'http://192.168.0.184:8080'; // set your comp's url here
 
-const store = createStore(
-  combineReducers({
-    apollo: apolloReducer,
-    nav: navigationReducer,
-  }),
-  {},
-  // initial state
-  composeWithDevTools(applyMiddleware(navigationMiddleware)),
-);
+const cache = new InMemoryCache();
 
-const cache = new ReduxCache({store});
-
-const reduxLink = new ReduxLink(store);
 const errorLink = onError(errors => {
   console.log(errors);
 });
 const httpLink = createHttpLink({uri: URL});
 
-const link = ApolloLink.from([reduxLink, errorLink, httpLink]);
+const link = ApolloLink.from([errorLink, httpLink]);
 
 export const client = new ApolloClient({
   link,
   cache,
 });
 
-export default class App extends Component {
-  render() {
-    return (
-      <ApolloProvider client={client}>
-        <ReduxProvider store={store}>
-          <AppWithNavigationState />
-        </ReduxProvider>
-      </ApolloProvider>
-    );
-  }
-}
+export default App = () => {
+  const initialState = useContext(Context);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <ApolloProvider client={client}>
+      <Context.Provider value={{state, dispatch}}>
+        <Text>app component</Text>
+      </Context.Provider>
+    </ApolloProvider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

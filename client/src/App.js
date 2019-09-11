@@ -11,8 +11,10 @@ import {onError} from 'apollo-link-error';
 import Context from './context';
 import reducer from './reducer';
 
+import AppTabNavigator from './navigation';
+
 const URL = 'http://10.0.2.2:8080';
-// const URL = 'http://192.168.0.184:8080'; // set your comp's url here
+// const URL = 'http://192.168.0.184:8080';
 
 const cache = new InMemoryCache();
 
@@ -35,7 +37,7 @@ export default App = () => {
   return (
     <ApolloProvider client={client}>
       <Context.Provider value={{state, dispatch}}>
-        <Text>app component</Text>
+        <AppTabNavigator />
       </Context.Provider>
     </ApolloProvider>
   );

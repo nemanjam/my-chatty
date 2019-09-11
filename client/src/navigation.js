@@ -1,109 +1,35 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {Text, View, StyleSheet} from 'react-native';
-import {connect} from 'react-redux';
+import React from 'react';
+import {Text, View} from 'react-native';
+import {createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 
-import {
-  NavigationActions,
-  addNavigationHelpers,
-  StackNavigator,
-  TabNavigator,
-} from 'react-navigation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {
-  createReduxBoundAddListener,
-  createReactNavigationReduxMiddleware,
-} from 'react-navigation-redux-helpers';
-
-import Groups from './screens/Groups';
-import Messages from './screens/Messages';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  tabText: {
-    color: '#777',
-    fontSize: 10,
-    justifyContent: 'center',
-  },
-  selected: {
-    color: 'blue',
-  },
-});
-
-// hof
-const TestScreen = title => () => (
-  <View style={styles.container}>
-    <Text>{title}</Text>
-  </View>
-);
-
-// tabs in main screen
-const MainScreenNavigator = TabNavigator(
-  {
-    Chats: {screen: Groups},
-    Settings: {screen: TestScreen('Settings')},
-  },
-  {
-    initialRouteName: 'Chats',
-  },
-);
-
-const AppNavigator = StackNavigator(
-  {
-    Main: {screen: MainScreenNavigator},
-    Messages: {screen: Messages},
-  },
-  {
-    mode: 'modal',
-  },
-);
-
-// reducer initialization code
-const initialState = AppNavigator.router.getStateForAction(
-  NavigationActions.reset({
-    index: 0,
-    actions: [
-      NavigationActions.navigate({
-        routeName: 'Main',
-      }),
-    ],
-  }),
-);
-
-export const navigationReducer = (state = initialState, action) => {
-  const nextState = AppNavigator.router.getStateForAction(action, state);
-  // Simply return the original `state` if `nextState` is null or undefined.
-  return nextState || state;
-};
-
-// Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
-export const navigationMiddleware = createReactNavigationReduxMiddleware(
-  'root',
-  state => state.nav,
-);
-
-const addListener = createReduxBoundAddListener('root');
-class AppWithNavigationState extends Component {
+class HomeScreen extends React.Component {
   render() {
     return (
-      <AppNavigator
-        navigation={addNavigationHelpers({
-          dispatch: this.props.dispatch,
-          state: this.props.nav,
-          addListener,
-        })}
-      />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Home!</Text>
+      </View>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  nav: state.nav,
+class SettingsScreen extends React.Component {
+  render() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Settings!</Text>
+      </View>
+    );
+  }
+}
+
+const TabNavigator = createBottomTabNavigator({
+  Home: HomeScreen,
+  Settings: SettingsScreen,
 });
 
-export default connect(mapStateToProps)(AppWithNavigationState);
+const AppTabNavigator = createAppContainer(TabNavigator);
+
+export default AppTabNavigator;

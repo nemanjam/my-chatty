@@ -24,6 +24,20 @@ class SettingsScreen extends React.Component {
   }
 }
 
+class NewGroupScreen extends React.Component {
+  static navigationOptions = {
+    title: 'NewGroup',
+  };
+
+  render() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>New group!</Text>
+      </View>
+    );
+  }
+}
+
 const GroupsScreenStack = createStackNavigator({
   Chats: {
     screen: GroupsScreen,
@@ -48,7 +62,7 @@ const TabNavigator = createBottomTabNavigator(
     Settings: SettingsScreenStack,
   },
   {
-    initialRouteName: 'Settings',
+    initialRouteName: 'Chats',
   },
 );
 
@@ -69,6 +83,7 @@ let StackNavigator = createStackNavigator({
   Messages: {
     screen: MessagesScreen,
   },
+  NewGroup: {screen: NewGroupScreen},
 });
 
 const AppTabNavigator = createAppContainer(StackNavigator);

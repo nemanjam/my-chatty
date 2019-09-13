@@ -7,9 +7,14 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
+  Image,
   TouchableHighlight,
   View,
+  Button,
 } from 'react-native';
+
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,13 +39,76 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 0.7,
   },
+  groupTextContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingLeft: 6,
+  },
+  groupText: {
+    color: '#8c8c8c',
+  },
+  groupImage: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+  },
+  groupTitleContainer: {
+    flexDirection: 'row',
+  },
+  groupLastUpdated: {
+    flex: 0.3,
+    color: '#8c8c8c',
+    fontSize: 11,
+    textAlign: 'right',
+  },
+  groupUsername: {
+    paddingVertical: 4,
+  },
+  header: {
+    alignItems: 'flex-end',
+    padding: 6,
+    borderColor: '#eee',
+    borderBottomWidth: 1,
+  },
+  warning: {
+    textAlign: 'center',
+    padding: 12,
+  },
 });
+
+// format createdAt with moment
+const formatCreatedAt = createdAt =>
+  moment(createdAt).calendar(null, {
+    sameDay: '[Today]',
+    nextDay: '[Tomorrow]',
+    nextWeek: 'dddd',
+    lastDay: '[Yesterday]',
+    lastWeek: 'dddd',
+    sameElse: 'DD/MM/YYYY',
+  });
+
+const Header = ({onPress}) => (
+  <View style={styles.header}>
+    <Button title={'New Group'} onPress={onPress} />
+  </View>
+);
 
 // create fake data to populate our ListView
 const fakeData = () =>
   _.times(20, i => ({
     id: i,
     name: `Group ${i}`,
+    messages: {
+      edges: [
+        {
+          node: {
+            createdAt: new Date(),
+            from: {username: `username ${i}`},
+            text: `text ${i}`,
+          },
+        },
+      ],
+    },
   }));
 
 class Group extends Component {
@@ -51,13 +119,37 @@ class Group extends Component {
 
   render() {
     const {
-      group: {id, name},
+      group: {id, name, messages},
     } = this.props;
 
     return (
       <TouchableHighlight key={id} onPress={this.goToMessages}>
         <View style={styles.groupContainer}>
-          <Text style={styles.groupName}>{name}</Text>
+          <Image
+            style={styles.groupImage}
+            source={{
+              uri: 'https://reactjs.org/logo-og.png',
+            }}
+          />
+          <View style={styles.groupTextContainer}>
+            <View style={styles.groupTitleContainer}>
+              <Text style={styles.groupName}>{`${name}`}</Text>
+              <Text style={styles.groupLastUpdated}>
+                {messages.edges.length
+                  ? formatCreatedAt(messages.edges[0].node.createdAt)
+                  : ''}
+              </Text>
+            </View>
+            <Text style={styles.groupUsername}>
+              {messages.edges.length
+                ? `${messages.edges[0].node.from.username}:`
+                : ''}
+            </Text>
+            <Text style={styles.groupText} numberOfLines={1}>
+              {messages.edges.length ? messages.edges[0].node.text : ''}
+            </Text>
+          </View>
+          <Icon name="angle-right" size={24} color={'#8c8c8c'} />
         </View>
       </TouchableHighlight>
     );
@@ -80,13 +172,17 @@ class GroupsScreen extends Component {
   constructor(props) {
     super(props);
     this.goToMessages = this.goToMessages.bind(this);
+    this.goToNewGroup = this.goToNewGroup.bind(this);
   }
-
-  componentDidMount() {}
 
   goToMessages(group) {
     const {navigate} = this.props.navigation;
     navigate('Messages', {groupId: group.id, title: group.name});
+  }
+
+  goToNewGroup() {
+    const {navigate} = this.props.navigation;
+    navigate('NewGroup');
   }
 
   renderItem = ({item}) => (
@@ -105,6 +201,7 @@ class GroupsScreen extends Component {
           data={fakeData()}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          ListHeaderComponent={() => <Header onPress={this.goToNewGroup} />}
         />
       </View>
     );

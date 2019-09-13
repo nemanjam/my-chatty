@@ -37,9 +37,8 @@ const fakeData = () =>
 
 class MessagesScreen extends Component {
   static navigationOptions = ({navigation}) => {
-    const {state} = navigation;
     return {
-      title: state.params.title,
+      title: navigation.state.params.title,
     };
   };
 

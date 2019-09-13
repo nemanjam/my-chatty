@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Button} from 'react-native';
 
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 
@@ -24,25 +24,52 @@ class SettingsScreen extends React.Component {
   }
 }
 
+const GroupsScreenStack = createStackNavigator({
+  Chats: {
+    screen: GroupsScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
+});
+
+const SettingsScreenStack = createStackNavigator({
+  Settings: {
+    screen: SettingsScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
+});
+
 const TabNavigator = createBottomTabNavigator(
   {
-    Chats: GroupsScreen,
-    Settings: SettingsScreen,
+    Chats: GroupsScreenStack,
+    Settings: SettingsScreenStack,
   },
   {
     initialRouteName: 'Settings',
   },
 );
 
-const StackNavigator = createStackNavigator(
-  {
-    Main: TabNavigator,
-    Messages: MessagesScreen,
+let StackNavigator = createStackNavigator({
+  Main: {
+    screen: TabNavigator,
+    navigationOptions: ({navigation}) => {
+      const routeName =
+        navigation.state.routes[navigation.state.index]['routes'][
+          navigation.state.routes[navigation.state.index]['index']
+        ].routeName;
+      // alert(JSON.stringify(routeName));
+      return {
+        title: routeName,
+      };
+    },
   },
-  {
-    mode: 'modal',
+  Messages: {
+    screen: MessagesScreen,
   },
-);
+});
 
 const AppTabNavigator = createAppContainer(StackNavigator);
 

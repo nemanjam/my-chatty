@@ -9,8 +9,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import GroupsScreen from './screens/GroupsScreen';
 import MessagesScreen from './screens/MessagesScreen';
+import SignInScreen from './screens/SignInScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import NewGroupScreen from './screens/NewGroupScreen';
 
-class SettingsScreen extends React.Component {
+class SettingsScreen1 extends React.Component {
   static navigationOptions = {
     title: 'Settings',
   };
@@ -19,20 +22,6 @@ class SettingsScreen extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Settings!</Text>
-      </View>
-    );
-  }
-}
-
-class NewGroupScreen extends React.Component {
-  static navigationOptions = {
-    title: 'NewGroup',
-  };
-
-  render() {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>New group!</Text>
       </View>
     );
   }
@@ -67,6 +56,7 @@ const TabNavigator = createBottomTabNavigator(
 );
 
 let StackNavigator = createStackNavigator({
+  // SignIn: {screen: SignInScreen},
   Main: {
     screen: TabNavigator,
     navigationOptions: ({navigation}) => {

@@ -18,7 +18,7 @@
     "randomcolor": "^0.5.4",
     "react": "16.8.6",
     "react-apollo": "^3.1.0",
-    "react-native": "0.60.5",
+    "react-native": "0.62.3",
     "react-native-alpha-listview": "^0.2.1",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-reanimated": "^1.2.0",
